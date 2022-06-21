@@ -15,10 +15,10 @@ import { Link } from "react-router-dom";
             <button className='round-button'>View/update Project</button>
             <br/>
             <br/>
-            <Link to="/vieworupdateOSP">Update/View Projects</Link>
+            <Link to="/ViewAllOSProjects">Update/View Projects</Link>
             <Link to="/" style={linkStyle}>Logout</Link>
-            <h1>Welcome to open source project home page</h1>
-            <h4>In order to add a Project <Link to='/addOSP'>Add a OSP project</Link></h4>
+            <h1>Welcome to open source Tracking System</h1>
+            <h4>In order to add a Open Source Project <Link to='/addOSProject'>Add a Open Source project</Link></h4>
         </div>
     );
 }

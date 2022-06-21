@@ -1,62 +1,63 @@
 import React from 'react';
 import { useState } from "react";
 import axios from "axios";
-
-import VieworupdateOSP from "./vieworupdateOSP";
+import { useHistory } from "react-router-dom"
+import ViewAllOSProjects from "./ViewAllOSProjects";
 
 const Login = () => {
+	const history = useHistory();
 
-
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [projectClientEmail, setProjectClientEmail] = useState("");
+	const [projectClientPassword, setProjectClientPassword] = useState("");
 	const [loginStatus, setLoginStatus] = useState();
 	const [responeData, setResponeData] = useState();
 
 	const handleSubmit = () => {
 		console.log("logged")
-		axios.post("http://localhost:8080/validateClient",
+		axios.post("http://localhost:8080/validateProjectClient/",
 			{
-				email: email,
-				password: password
+				projectClientEmail: projectClientEmail,
+				projectClientPassword: projectClientPassword
 			}).then(response => {
 				setLoginStatus(response.status)
 				setResponeData(response.data)
+				
 				console.log(response)
+				history.push({
+					pathname: '/ViewAllOSProjects',
+					state: { projectClientDetails: response.data }
+				});
 			}).catch((error) => {
 				setLoginStatus(error.status)
 				setResponeData(error.data) // change based on json reponse
+				console.log(error.response.data)
+				if(error.response.data === "Invalid Credentials")
+					history.push("/invalidlogincredspage")
 			});
 		// setLoginStatus(200)
 	}
 
 	return (
-		<div>
-			{loginStatus != 200 && (
 				<div>
 				{/* <form> */}
 					<input
 						type="email"
-						name="email"
-						placeholder="Email"
-						value={email}
-						onChange={(event) => { setEmail(event.target.value) }}
+						name="projectClientEmail"
+						placeholder="Project Client Email"
+						value={projectClientEmail}
+						onChange={(event) => { setProjectClientEmail(event.target.value) }}
 						required
 					/>
 					<input
 						type="password"
-						name="password"
-						placeholder="Password"
-						value={password}
-						onChange={(event) => { setPassword(event.target.value) }}
+						name="projectClientPassword"
+						placeholder="Project Client Password"
+						value={projectClientPassword}
+						onChange={(event) => { setProjectClientPassword(event.target.value) }}
 						required
 					/>
 					<button type="submit" onClick={handleSubmit} >Login</button>
 				{/* </form> */}
-				</div>
-			 )}
-			{loginStatus == 200 && (
-				<VieworupdateOSP jsonData={responeData} />
-			)}
 		</div>
 	);
 }
